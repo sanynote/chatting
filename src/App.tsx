@@ -1,24 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import io, { Socket } from "socket.io-client";
+
+type Message = {
+  readonly nickname: string;
+  readonly message: string;
+  readonly profileImage?: string;
+  readonly createAt: Date;
+};
 
 function App() {
+  const [socket, setSocket] = React.useState<Socket | null>(null);
+  const [messages, setMessages] = React.useState<Message[] | []>([]);
+
+  React.useEffect(() => {
+    const prevSocket = io(`${process.env.REACT_APP_XXX}`, {
+      transports: ["websocket"],
+    });
+    setSocket(prevSocket);
+  }, []);
+
+  const messageListener = (message: Message) =>
+    setMessages([...messages, message]);
+
+  React.useEffect(() => {
+    socket?.on("message", messageListener);
+  }, [messageListener]);
+
+  const sending = () => {
+    const data: Message = {
+      nickname: "hihi",
+      message: "hello",
+      profileImage: "image",
+      createAt: new Date(),
+    };
+    socket?.emit("message", data);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={sending}>보내기</button>
+      <ul>
+        {messages.map((msg, index) => {
+          return (
+            <li key={index}>
+              <div>{msg.nickname}</div>
+              <div>{msg.message}</div>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }
