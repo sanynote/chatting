@@ -6,6 +6,7 @@ import {router} from "./routes/main.routes";
 function App() {
 
   return (
+
     <RouterProvider router={router}/>
   );
 }
