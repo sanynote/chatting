@@ -4,9 +4,6 @@ import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
 
 function MainPage() {
-  React.useEffect(() => {
-    console.log(user, "user");
-  });
   const user = useRecoilValue(UserInfo);
   const navigate = useNavigate();
   if (user) return <div>채팅방으로 이동하기</div>;

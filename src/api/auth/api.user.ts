@@ -20,6 +20,16 @@ export type SignInType =  {
 
 export type SignInResponseType = BaseResponseType<SignInType>;
 
+export const SIGN_UP = (
+  signInForm: Pick<SignInType, "accountId" & { password: string }>
+): Promise<AxiosResponse<SignInResponseType>> => {
+  return userApiInstance({
+    method: METHOD.POST,
+    url: "users/login",
+    data: signInForm,
+  });
+};
+
 export const SIGN_IN = (
   signInForm: Pick<SignInType, "accountId" & { password: string }>
 ): Promise<AxiosResponse<SignInResponseType>> => {
@@ -29,3 +39,4 @@ export const SIGN_IN = (
     data: signInForm,
   });
 };
+

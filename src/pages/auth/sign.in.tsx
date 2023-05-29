@@ -9,6 +9,7 @@ function SignIn() {
   const { register, handleSubmit } = useForm();
   React.useEffect(() => {
     console.log(user, "user");
+    console.log(localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN!),'tiken')
   }, [user]);
   const onSubmit = async (signInFormData: any) => {
     console.log(signInFormData);
@@ -32,6 +33,7 @@ function SignIn() {
       console.log(e, "에러");
     }
   };
+
   return (
     <div>
       <h3>로그인페이지</h3>
