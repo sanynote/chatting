@@ -1,12 +1,49 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
+import axios, { AxiosError } from "axios";
 
 function MainPage() {
-  const user = useRecoilValue(UserInfo);
+  const [user, setUser] = useRecoilState(UserInfo);
   const navigate = useNavigate();
-  if (user) return <div>채팅방으로 이동하기</div>;
+
+  const signOut = async () => {
+    const refreshToken = localStorage.getItem(
+      `${process.env.REACT_APP_REFRESH_TOKEN}`
+    );
+    if (refreshToken) {
+      try {
+        const { status } = await axios.patch(
+          `${process.env.REACT_APP_USER}/users/logout`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${refreshToken}`,
+            },
+          }
+        );
+        if (status) alert("success logout");
+      } catch (e) {
+        if (e instanceof AxiosError && e.response) {
+          const code = e.response.status;
+          if (code === 500) throw new Error("Backend error");
+          else throw new Error("Error via unknown");
+        }
+      }
+      setUser(null);
+      localStorage.clear();
+    }
+  };
+
+  if (user) {
+    return (
+      <>
+        <div>로그인 된 상태입니다. 채팅방으로 이동하기</div>
+        <button onClick={signOut}>로그아웃하기</button>
+      </>
+    );
+  }
 
   return (
     <div>
