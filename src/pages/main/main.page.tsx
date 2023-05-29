@@ -39,7 +39,7 @@ function MainPage() {
   if (user) {
     return (
       <>
-        <div>로그인 된 상태입니다. 채팅방으로 이동하기</div>
+        <div onClick={()=>navigate('/chat')}>로그인 된 상태입니다. 채팅방으로 이동하기</div>
         <button onClick={signOut}>로그아웃하기</button>
       </>
     );

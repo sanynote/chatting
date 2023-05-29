@@ -3,14 +3,13 @@ import { useForm } from "react-hook-form";
 import { SIGN_IN } from "../../api/auth/api.user";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
   const [user, setUser] = useRecoilState(UserInfo);
   const { register, handleSubmit } = useForm();
-  React.useEffect(() => {
-    console.log(user, "user");
-    console.log(localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN!),'tiken')
-  }, [user]);
+
+  const navigate = useNavigate();
   const onSubmit = async (signInFormData: any) => {
     console.log(signInFormData);
     try {
@@ -28,11 +27,16 @@ function SignIn() {
           response.refreshToken
         );
         setUser(response);
+        alert('로그인에 성공했습니다. 채팅방으로 이동합니다.')
+        navigate('/chat')
       }
     } catch (e) {
       console.log(e, "에러");
     }
   };
+
+  if (user)
+    return <div>이미 로그인 된 상태입니다. <button onClick={()=> navigate("/")}>메인페이지로 돌아가기</button></div>;
 
   return (
     <div>
