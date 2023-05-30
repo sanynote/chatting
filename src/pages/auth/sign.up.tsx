@@ -14,38 +14,47 @@ function SignUp() {
   const {
     register,
     handleSubmit,
-    getValues,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({ mode: "onChange" });
 
-  // React.useEffect(()=>{
-  //   console.log(errors?.accountId?.message,'ssss')
-  //   console.log(idValue,'idValue')
-  //   console.log(watch('accountId'),'idid')
-  // },[watch('accountId')])
-  console.log(watch('accountId'),'idid')
   const onSubmit = (data: any) => console.log(data);
   const [user, setUser] = useRecoilState(UserInfo);
-  const [isIdLocked, setIsIdLocked] = React.useState(false);
-  const [isNicknameLocked, setIsNicknameLocked] = React.useState(false);
-  const [isPhoneLocked, setIsPhoneLocked] = React.useState(false);
-  // const [idValue,setIdValue] = React.useState('')
+  const [accountIdLocked, setAccountIdLocked] = React.useState(false);
+  const [nicknameLocked, setNicknameLocked] = React.useState(false);
+  const [phoneLocked, setPhoneLocked] = React.useState(false);
 
   const navigate = useNavigate();
 
-  const lockDuplicateButton = () => {
-    if (isIdLocked) return true;
-    if (!(watch('accountId') && errors?.accountId?.message === undefined)) return true;
+  const accountIdValue = watch("accountId");
+  const nicknameValue = watch("nickname");
+  const phoneValue = watch("phone");
+
+  const lockIdDuplicateButton = () => {
+    if (accountIdLocked) return true;
+    if (!(accountIdValue && errors?.accountId?.message === undefined))
+      return true;
+    return false;
+  };
+
+  const lockNicknameDuplicateButton = () => {
+    if (nicknameLocked) return true;
+    if (!(nicknameValue && errors?.nickname?.message === undefined))
+      return true;
+    return false;
+  };
+
+  const lockPhoneDuplicateButton = () => {
+    if (phoneLocked) return true;
+    if (!(phoneValue && errors?.phone?.message === undefined)) return true;
     return false;
   };
 
   const duplicateId = async () => {
-    const accountIdCheck = getValues("accountId");
     try {
-      const { status, data } = await CHECK_ACCOUNT_ID(accountIdCheck);
+      const { status, data } = await CHECK_ACCOUNT_ID(accountIdValue);
       if (status === 200) {
-        setIsIdLocked(data.response["validateAccountId"]);
+        setAccountIdLocked(data.response["validateAccountId"]);
         alert("사용가능한 아이디입니다.");
       }
     } catch (e) {
@@ -56,11 +65,10 @@ function SignUp() {
   };
 
   const duplicateNickname = async () => {
-    const nicknameCheck = getValues("nickname");
     try {
-      const { status, data } = await CHECK_NICKNAME(nicknameCheck);
+      const { status, data } = await CHECK_NICKNAME(nicknameValue);
       if (status === 200) {
-        setIsNicknameLocked(data.response["validateNickname"]);
+        setNicknameLocked(data.response["validateNickname"]);
         alert("사용가능한 닉네임입니다.");
       }
     } catch (e) {
@@ -71,11 +79,10 @@ function SignUp() {
   };
 
   const duplicatePhone = async () => {
-    const phoneNumberCheck = getValues("phoneNumber");
     try {
-      const { status, data } = await CERTIFICATION_PHONE(phoneNumberCheck);
+      const { status, data } = await CERTIFICATION_PHONE(phoneValue);
       if (status === 200) {
-        setIsPhoneLocked(data.response["validatePhone"]);
+        setPhoneLocked(data.response["validatePhone"]);
         alert("사용가능한 핸드폰 번호 입니다.");
       }
     } catch (e) {
@@ -103,7 +110,7 @@ function SignUp() {
           <>
             <label htmlFor="accountId">아이디</label>
             <input
-              disabled={isIdLocked}
+              disabled={accountIdLocked}
               id="accountId"
               type="text"
               placeholder="accountId"
@@ -115,7 +122,7 @@ function SignUp() {
                 },
               })}
             />
-            <button disabled={lockDuplicateButton()} onClick={duplicateId}>
+            <button type="button" disabled={lockIdDuplicateButton()} onClick={duplicateId}>
               중복확인
             </button>
             {errors?.accountId?.message}
@@ -125,7 +132,7 @@ function SignUp() {
           <>
             <label htmlFor="nickname">닉네임</label>
             <input
-              disabled={isNicknameLocked}
+              disabled={nicknameLocked}
               id="nickname"
               type="text"
               placeholder="닉네임"
@@ -137,48 +144,90 @@ function SignUp() {
                 },
               })}
             />
-            <button onClick={duplicateNickname} disabled={isNicknameLocked}>중복확인</button>
+            <button
+              type="button"
+              onClick={duplicateNickname}
+              disabled={lockNicknameDuplicateButton()}
+            >
+              중복확인
+            </button>
             {errors?.nickname?.message}
           </>
         </div>
         <div>
           <>
-            <label htmlFor="phoneNumber">휴대폰 번호</label>
+            <label htmlFor="phone">휴대폰 번호</label>
             <input
-              disabled={isPhoneLocked}
-              id="phoneNumber"
+              disabled={phoneLocked}
+              id="phone"
               type="text"
               placeholder="010-1111-1111"
-              {...register("phoneNumber", {
+              {...register("phone", {
                 required: "핸드폰 번호를 입력해주세요",
                 pattern: {
-                  value: /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/,
+                  value: /^01([0|1|6|7|8|9])([0-9]{3,4})([0-9]{4})$/,
                   message: "번호 형식에 맞지 않습니다.",
                 },
               })}
             />
-            <button onClick={duplicatePhone} disabled={isPhoneLocked} >중복확인</button>
-            {errors?.phoneNumber?.message}
+            <button
+              type="button"
+              onClick={duplicatePhone}
+              disabled={lockPhoneDuplicateButton()}
+            >
+              중복확인
+            </button>
+            {errors?.phone?.message}
           </>
         </div>
         <div>
-          <label htmlFor="password">비밀번호</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="****************"
-            {...register("password")}
-          />
+          <>
+            <label htmlFor="password">비밀번호</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="****************"
+              {...register("password", {
+                required: "비밀번호를 입력해주세요",
+                pattern: {
+                  value:
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  message:
+                    "비밀번호는 최소 8자, 하나 이상의 문자, 숫자 및 특수문자입니다.",
+                },
+              })}
+            />
+            {errors?.password?.message}
+          </>
         </div>
         <div>
-          <label htmlFor="confirmPassword">비밀번호 확인</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            placeholder="****************"
-            {...register("confirmPassword")}
-          />
+          <>
+            <label htmlFor="confirmPassword">비밀번호 확인</label>
+            <input
+              id="confirmPassword"
+              type="password"
+              placeholder="****************"
+              {...register("confirmPassword", {
+                required: "비밀번호를 입력해주세요",
+                validate: {
+                  check: (val) => {
+                    if (watch("password") !== val) {
+                      return "비밀번호가 일치하지 않습니다.";
+                    }
+                  },
+                },
+                pattern: {
+                  value:
+                    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                  message:
+                    "비밀번호는 최소 8자, 하나 이상의 문자, 숫자 및 특수문자입니다.",
+                },
+              })}
+            />
+            {errors?.confirmPassword?.message}
+          </>
         </div>
+
         <button type="submit">회원가입하기</button>
       </form>
     </div>
