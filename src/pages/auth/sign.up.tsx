@@ -7,6 +7,7 @@ import {
   CERTIFICATION_PHONE,
   CHECK_ACCOUNT_ID,
   CHECK_NICKNAME,
+  SIGN_UP,
 } from "../../api/auth/api.sign.up";
 import { AxiosError } from "axios";
 
@@ -18,11 +19,23 @@ function SignUp() {
     formState: { errors },
   } = useForm({ mode: "onChange" });
 
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = async (datas: any) => {
+    try {
+      console.log(datas,'datas')
+      const { status, data } = await SIGN_UP(datas);
+      if (status === 201) {
+        console.log(status, data, "야호");
+      }
+    } catch (e) {
+      console.log(e, "e");
+    }
+  };
+
   const [user, setUser] = useRecoilState(UserInfo);
   const [accountIdLocked, setAccountIdLocked] = React.useState(false);
   const [nicknameLocked, setNicknameLocked] = React.useState(false);
   const [phoneLocked, setPhoneLocked] = React.useState(false);
+  const [isMarketing, setIsMarketing] = React.useState(false);
 
   const navigate = useNavigate();
 
@@ -122,7 +135,11 @@ function SignUp() {
                 },
               })}
             />
-            <button type="button" disabled={lockIdDuplicateButton()} onClick={duplicateId}>
+            <button
+              type="button"
+              disabled={lockIdDuplicateButton()}
+              onClick={duplicateId}
+            >
               중복확인
             </button>
             {errors?.accountId?.message}
@@ -227,8 +244,17 @@ function SignUp() {
             {errors?.confirmPassword?.message}
           </>
         </div>
+        <input
+          id="isMarketing"
+          type="checkbox"
+          {...register("isMarketing", { value: isMarketing })}
+          onClick={() => setIsMarketing((prevState) => !prevState)}
+        />
+        <label>마케팅 수신동의</label>
 
-        <button type="submit">회원가입하기</button>
+        <div>
+          <button type="submit">회원가입하기</button>
+        </div>
       </form>
     </div>
   );

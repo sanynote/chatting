@@ -1,6 +1,6 @@
-import {userApiInstance,METHOD} from "../config/axios.instance";
+import { userApiInstance, METHOD } from "../config/axios.instance";
 import { AxiosResponse } from "axios";
-import {SignInResponseType} from "./api.sign.in";
+import { SignInResponseType } from "./api.sign.in";
 
 type CheckAccountIdResponse = BaseResponseType<{
   readonly validateAccountId: boolean;
@@ -39,13 +39,18 @@ export const CERTIFICATION_PHONE = (
   });
 };
 
-
 export const SIGN_UP = (
-  signInForm: Pick<SignInType, "accountId" & { password: string }>
+  signInForm: Pick<
+    SignInType,
+    "accountId" | "nickname" | "phone" | "isMarketing"
+  > & {
+    password: string;
+    confirmPassword: string;
+  }
 ): Promise<AxiosResponse<SignInResponseType>> => {
   return userApiInstance({
     method: METHOD.POST,
-    url: "users/login",
+    url: "/users/register",
     data: signInForm,
   });
 };
