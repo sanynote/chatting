@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { SIGN_IN } from "../../api/auth/api.user";
+import { SIGN_IN } from "../../api/auth/api.sign.in";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
