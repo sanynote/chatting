@@ -15,14 +15,30 @@ function SignUp() {
     register,
     handleSubmit,
     getValues,
+    watch,
     formState: { errors },
   } = useForm();
+
+  // React.useEffect(()=>{
+  //   console.log(errors?.accountId?.message,'ssss')
+  //   console.log(idValue,'idValue')
+  //   console.log(watch('accountId'),'idid')
+  // },[watch('accountId')])
+  console.log(watch('accountId'),'idid')
   const onSubmit = (data: any) => console.log(data);
   const [user, setUser] = useRecoilState(UserInfo);
   const [isIdLocked, setIsIdLocked] = React.useState(false);
   const [isNicknameLocked, setIsNicknameLocked] = React.useState(false);
   const [isPhoneLocked, setIsPhoneLocked] = React.useState(false);
+  // const [idValue,setIdValue] = React.useState('')
+
   const navigate = useNavigate();
+
+  const lockDuplicateButton = () => {
+    if (isIdLocked) return true;
+    if (!(watch('accountId') && errors?.accountId?.message === undefined)) return true;
+    return false;
+  };
 
   const duplicateId = async () => {
     const accountIdCheck = getValues("accountId");
@@ -99,7 +115,7 @@ function SignUp() {
                 },
               })}
             />
-            <button disabled={isIdLocked} onClick={duplicateId}>
+            <button disabled={lockDuplicateButton()} onClick={duplicateId}>
               중복확인
             </button>
             {errors?.accountId?.message}
