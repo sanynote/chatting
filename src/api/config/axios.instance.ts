@@ -67,3 +67,6 @@ export enum METHOD {
 export const userApiInstance = createAxios(
   process.env.REACT_APP_USER!
 );
+export const uploadApiInstance = createAxios(
+  process.env.REACT_APP_UPLOAD_BASE_URL!
+);
