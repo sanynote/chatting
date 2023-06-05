@@ -5,7 +5,7 @@ import { router } from "./routes/main.routes";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../src/store/auth/user.info";
 import { GET_CURRENT_USER } from "./api/auth/api.get.user";
-import { GET_IMAGE } from "./api/auth/api.get.image";
+import { GET_IMAGE } from "./api/auth/api.image";
 
 function App() {
   const [user, setUser] = useRecoilState(UserInfo);
