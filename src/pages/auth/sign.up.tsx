@@ -21,10 +21,11 @@ function SignUp() {
 
   const onSubmit = async (datas: any) => {
     try {
-      console.log(datas,'datas')
+      console.log(datas, "datas");
       const { status, data } = await SIGN_UP(datas);
       if (status === 201) {
-        console.log(status, data, "야호");
+        alert("회원가입에 성공했습니다. 로그인페이지로 이동합니다.");
+        navigate("/signin");
       }
     } catch (e) {
       console.log(e, "e");
