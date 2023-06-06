@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import { METHOD, uploadApiInstance } from "../config/axios.instance";
 
-export type GetImageResponseType = {
+export type ImageResponseType = {
   id: string;
   createdAt: string;
   updatedAt: string;
@@ -12,24 +12,10 @@ export type GetImageResponseType = {
   location: string[];
 };
 
-type SetImageResponseType = {
-  createdAt: string;
-  deletedAt: string | null;
-  id: string;
-  kind: string;
-  location: string[];
-  ownerAccountId: string;
-  ownerId: string;
-  updatedAt: string | null;
-};
+type ImageResponse = BaseResponseType<ImageResponseType>;
+type FileResultType = string | Blob | null | undefined;
 
-type ImageGetResponse = BaseResponseType<GetImageResponseType>;
-type ImageSetResponse= BaseResponseType<SetImageResponseType>
-type fileReaderResultType = string | Blob | null | undefined;
-
-export function GET_IMAGE(
-  uuid: string
-): Promise<AxiosResponse<ImageGetResponse>> {
+export function GET_IMAGE(uuid: string): Promise<AxiosResponse<ImageResponse>> {
   return uploadApiInstance({
     method: METHOD.GET,
     url: `/upload/ownerId?ownerId=${uuid}&kind=profileImage`,
@@ -38,19 +24,19 @@ export function GET_IMAGE(
 
 export function SET_IMAGE(
   kind: string,
-  file: fileReaderResultType,
-): Promise<AxiosResponse<ImageGetResponse>> {
+  file: FileResultType
+): Promise<AxiosResponse<ImageResponse>> {
   return uploadApiInstance({
     method: METHOD.POST,
-    url: '/upload/one',
+    url: "/upload/one",
     data: {
       kind,
       file,
     },
 
     headers: {
-      Accept: '*/*',
-      'Content-type': 'multipart/form-data',
+      Accept: "*/*",
+      "Content-type": "multipart/form-data",
     },
   });
 }

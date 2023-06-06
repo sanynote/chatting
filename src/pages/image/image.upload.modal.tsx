@@ -3,10 +3,17 @@ import "./image.css";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { SET_IMAGE } from "../../api/auth/api.image";
+import imageCompression from "browser-image-compression";
+
 interface Props {
   isModal: boolean;
   setIsModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+const options = {
+  maxSizeMB: 1,
+  maxWidthOrHeight: 1024,
+};
 
 function ImageUploadModal({ isModal, setIsModal }: Props) {
   const [user, setUser] = useRecoilState(UserInfo);
@@ -29,7 +36,8 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
     if (!imageFile) return;
 
     try {
-      const { status, data } = await SET_IMAGE("profileImage", imageFile);
+      const compressedFile = await imageCompression(imageFile, options);
+      const { status, data } = await SET_IMAGE("profileImage", compressedFile);
 
       if (status === 201) {
         if (user) {
