@@ -13,11 +13,6 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
   const firstImage = user ? user.profileImage : "";
   const [imageUrl, setImageUrl] = React.useState(firstImage);
   const [imageFile, setImageFile] = React.useState<File>();
-  const [imageFileBlob, setImageFileBlob] = React.useState("");
-
-  React.useEffect(() => {
-    console.log(imageUrl, "ddkdkdk");
-  }, [imageUrl]);
 
   const closeButton = () => {
     setIsModal(false);
@@ -31,19 +26,21 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
     // 이미지 file 자체
   };
   const changeImageButton = async () => {
-    console.log(imageUrl, imageFile, imageFileBlob, "랄랄루");
     if (!imageFile) return;
 
     try {
-      // const formData = new FormData();
-      // formData.append("kind", "profileImage");
-      // formData.append("file", imageFile);
-
       const { status, data } = await SET_IMAGE("profileImage", imageFile);
 
-      if (status === 201) console.log(status, "success");
+      if (status === 201) {
+        if (user) {
+          setUser({ ...user, profileImage: data.response.location[0] });
+          alert("프로필사진 변경에 성공했습니다.");
+          setIsModal(false);
+        }
+      }
     } catch (e) {
       console.log(e, "e");
+      alert("프로필사진 변경에 실패했습니다.");
     }
   };
   if (!isModal) return null;
