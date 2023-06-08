@@ -72,8 +72,12 @@ function SignUp() {
         alert("사용가능한 아이디입니다.");
       }
     } catch (e) {
-      if (e instanceof AxiosError && e.response?.status === 409) {
-        alert("이미 존재하는 아이디입니다.");
+      if (e instanceof AxiosError && e.response) {
+        const code = e.response.status;
+        if (code === 409) alert("이미 존재하는 아이디입니다.");
+        if (code === 500) alert("서버에러");
+      } else {
+        throw new Error("예상하지 못한 에러,,");
       }
     }
   };
@@ -86,8 +90,12 @@ function SignUp() {
         alert("사용가능한 닉네임입니다.");
       }
     } catch (e) {
-      if (e instanceof AxiosError && e.response?.status === 409) {
-        alert("이미 존재하는 닉네임입니다.");
+      if (e instanceof AxiosError && e.response) {
+        const code = e.response.status;
+        if (code === 409) alert("이미 존재하는 닉네임입니다.");
+        if (code === 500) alert("서버에러");
+      } else {
+        throw new Error("예상하지 못한 에러,,");
       }
     }
   };
@@ -100,8 +108,12 @@ function SignUp() {
         alert("사용가능한 핸드폰 번호 입니다.");
       }
     } catch (e) {
-      if (e instanceof AxiosError && e.response?.status === 409) {
-        alert("이미 존재하는 번호입니다.");
+      if (e instanceof AxiosError && e.response) {
+        const code = e.response.status;
+        if (code === 409) alert("이미 가입된 번호입니다.");
+        if (code === 500) alert("서버에러");
+      } else {
+        throw new Error("예상하지 못한 에러,,");
       }
     }
   };

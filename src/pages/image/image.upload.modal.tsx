@@ -5,6 +5,7 @@ import { UserInfo } from "../../store/auth/user.info";
 import { SET_IMAGE } from "../../api/auth/api.image";
 import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
+import {AxiosError} from "axios";
 
 interface Props {
   isModal: boolean;
@@ -48,7 +49,14 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
         }
       }
     } catch (e) {
-      console.log(e, "e");
+      if (e instanceof AxiosError && e.response) {
+        const code = e.response.status;
+        if (code === 401) alert("권한이 없어 작업을 진행할 수 없습니다.");
+        if (code === 422) alert("데이터 형식이 일치하지 않습니다.");
+        if (code === 500) alert("서버에러");
+      } else {
+        throw new Error("예상하지 못한 에러,,");
+      }
       alert("프로필사진 변경에 실패했습니다.");
     }
   };

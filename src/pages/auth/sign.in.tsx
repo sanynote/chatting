@@ -4,6 +4,7 @@ import { SIGN_IN } from "../../api/auth/api.sign.in";
 import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 function SignIn() {
   const [user, setUser] = useRecoilState(UserInfo);
@@ -16,7 +17,6 @@ function SignIn() {
       const { status, data } = await SIGN_IN(signInFormData);
 
       if (status) {
-        console.log(status, "status");
         const { response } = data;
         localStorage.setItem(
           process.env.REACT_APP_ACCESS_TOKEN!,
@@ -31,7 +31,13 @@ function SignIn() {
         navigate("/chat");
       }
     } catch (e) {
-      console.log(e, "에러");
+      if (e instanceof AxiosError && e.response) {
+        const code = e.response.status;
+        if (code === 400) alert("아이디 또는 비밀번호가 잘못되었습니다.");
+        if (code === 500) alert("서버에러");
+      } else {
+        throw new Error("예상하지 못한 에러,,");
+      }
     }
   };
 
