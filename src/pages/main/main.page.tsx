@@ -27,8 +27,9 @@ function MainPage() {
       } catch (e) {
         if (e instanceof AxiosError && e.response) {
           const code = e.response.status;
-          if (code === 500) throw new Error("Backend error");
-          else throw new Error("Error via unknown");
+          if (code === 500) throw new Error("서버에러");
+        } else {
+          throw new Error("예상하지 못한 에러,,");
         }
       }
       setUser(null);

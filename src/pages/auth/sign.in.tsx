@@ -27,8 +27,8 @@ function SignIn() {
           response.refreshToken
         );
         setUser(response);
-        alert('로그인에 성공했습니다. 채팅방으로 이동합니다.')
-        navigate('/chat')
+        alert("로그인에 성공했습니다. 채팅방으로 이동합니다.");
+        navigate("/chat");
       }
     } catch (e) {
       console.log(e, "에러");
@@ -36,26 +36,35 @@ function SignIn() {
   };
 
   if (user)
-    return <div>이미 로그인 된 상태입니다. <button onClick={()=> navigate("/")}>메인페이지로 돌아가기</button></div>;
+    return (
+      <div>
+        이미 로그인 된 상태입니다.{" "}
+        <button onClick={() => navigate("/")}>메인페이지로 돌아가기</button>
+      </div>
+    );
 
   return (
     <div>
       <h3>로그인페이지</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <label htmlFor="accountId">아이디</label>
-        <input
-          id="accountId"
-          type="text"
-          placeholder="test@email.com"
-          {...register("accountId")}
-        />
-        <label htmlFor="password">비밀번호</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="****************"
-          {...register("password")}
-        />
+        <div>
+          <label htmlFor="accountId">아이디</label>
+          <input
+            id="accountId"
+            type="text"
+            placeholder="아이디를 입력하세요"
+            {...register("accountId")}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">비밀번호</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="****************"
+            {...register("password")}
+          />
+        </div>
         <button type="submit">로그인</button>
       </form>
     </div>

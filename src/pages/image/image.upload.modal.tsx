@@ -4,6 +4,7 @@ import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { SET_IMAGE } from "../../api/auth/api.image";
 import imageCompression from "browser-image-compression";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   isModal: boolean;
@@ -51,7 +52,17 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
       alert("프로필사진 변경에 실패했습니다.");
     }
   };
+  const navigate = useNavigate();
   if (!isModal) return null;
+  if (!user)
+    return (
+      <>
+        <div>로그인이 필요한 페이지입니다.</div>
+        <button onClick={() => navigate("/signin")}>
+          로그인 화면으로 돌아가기
+        </button>
+      </>
+    );
   return (
     <div className="modalArea">
       <p>
