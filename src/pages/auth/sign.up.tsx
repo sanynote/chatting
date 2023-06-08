@@ -10,6 +10,7 @@ import {
   SIGN_UP,
 } from "../../api/auth/api.sign.up";
 import { AxiosError } from "axios";
+import BackButton from "../../common/back.button";
 
 function SignUp() {
   const {
@@ -130,6 +131,7 @@ function SignUp() {
 
   return (
     <div>
+      <BackButton />
       <h3>회원가입 페이지</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>

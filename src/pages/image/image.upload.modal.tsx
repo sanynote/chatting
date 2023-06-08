@@ -5,7 +5,8 @@ import { UserInfo } from "../../store/auth/user.info";
 import { SET_IMAGE } from "../../api/auth/api.image";
 import imageCompression from "browser-image-compression";
 import { useNavigate } from "react-router-dom";
-import {AxiosError} from "axios";
+import { AxiosError } from "axios";
+import BackButton from "../../common/back.button";
 
 interface Props {
   isModal: boolean;
@@ -73,6 +74,7 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
     );
   return (
     <div className="modalArea">
+      <BackButton />
       <p>
         {imageUrl && <img src={imageUrl} style={{ width: 100, height: 100 }} />}
       </p>

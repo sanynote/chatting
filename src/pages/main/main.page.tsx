@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
+import BackButton from "../../common/back.button";
 
 function MainPage() {
   const [user, setUser] = useRecoilState(UserInfo);

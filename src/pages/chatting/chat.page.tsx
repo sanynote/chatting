@@ -4,6 +4,7 @@ import { useRecoilValue } from "recoil";
 import { userInfo } from "os";
 import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../common/back.button";
 
 type Message = {
   readonly nickname: string;
@@ -17,6 +18,7 @@ function ChatPage() {
   const [socket, setSocket] = React.useState<Socket | null>(null);
   const [messages, setMessages] = React.useState<Message[] | []>([]);
   const [textContent, setTextContent] = React.useState<string>("");
+
   React.useEffect(() => {
     const prevSocket = io(`${process.env.REACT_APP_XXX}`, {
       transports: ["websocket"],
@@ -57,7 +59,8 @@ function ChatPage() {
 
   return (
     <div style={{ height: "100vh" }}>
-      <div style={{ width: "100%", height: "93%", overflow: "scroll" }}>
+      <div style={{height:'7%'}}><BackButton /></div>
+      <div style={{ width: "100%", height: "86%", overflow: "scroll" }}>
         {messages.map((msg, index) => {
           return (
             <div
@@ -71,7 +74,7 @@ function ChatPage() {
               <div style={{ width: "15%" }}>
                 <img src={msg.profileImage} width={50} height={50} />
               </div>
-              <div style={{ width: "85%", backgroundColor: "pink" }}>
+              <div style={{ width: "85%" }}>
                 <div>{msg.nickname}</div>
                 <div style={{ wordBreak: "break-all" }}>{msg.message}</div>
               </div>

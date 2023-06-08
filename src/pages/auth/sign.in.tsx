@@ -5,6 +5,7 @@ import { useRecoilState } from "recoil";
 import { UserInfo } from "../../store/auth/user.info";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import BackButton from "../../common/back.button";
 
 function SignIn() {
   const [user, setUser] = useRecoilState(UserInfo);
@@ -51,6 +52,7 @@ function SignIn() {
 
   return (
     <div>
+      <BackButton />
       <h3>로그인페이지</h3>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
