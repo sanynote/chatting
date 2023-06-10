@@ -19,6 +19,7 @@ function createAxios(baseURL: string) {
     }
     return config;
   });
+
   instance.interceptors.response.use(
     (response) => response,
     async (error) => {
@@ -64,9 +65,7 @@ export enum METHOD {
   DELETE = "DELETE",
 }
 
-export const userApiInstance = createAxios(
-  process.env.REACT_APP_USER!
-);
+export const userApiInstance = createAxios(process.env.REACT_APP_USER!);
 export const uploadApiInstance = createAxios(
   process.env.REACT_APP_UPLOAD_BASE_URL!
 );

@@ -57,12 +57,7 @@ function App() {
       const uuid = user?.id;
       if (uuid) {
         const profileImage = await setImgToUser(uuid);
-
-        const newUser = {
-          ...user,
-          profileImage,
-        };
-        await setUser(newUser);
+        await setUser({...user, profileImage});
         setIsLoading(false);
       }
     });
