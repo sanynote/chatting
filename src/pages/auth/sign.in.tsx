@@ -13,7 +13,6 @@ function SignIn() {
 
   const navigate = useNavigate();
   const onSubmit = async (signInFormData: any) => {
-    console.log(signInFormData);
     try {
       const { status, data } = await SIGN_IN(signInFormData);
 
@@ -28,8 +27,8 @@ function SignIn() {
           response.refreshToken
         );
         setUser(response);
-        alert("로그인에 성공했습니다. 채팅방으로 이동합니다.");
-        navigate("/chat");
+        alert("로그인에 성공했습니다. 메인페이지로 이동합니다.");
+        navigate("/");
       }
     } catch (e) {
       if (e instanceof AxiosError && e.response) {
