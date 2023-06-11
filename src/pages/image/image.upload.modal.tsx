@@ -26,7 +26,7 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
   const [isImageSave, setIsImageSave] = React.useState(false);
 
   React.useEffect(() => {
-    if (!isImageSave) setIsModal(false);
+    if (!isImageSave) setTimeout(() => setIsModal(false), 100);
   }, [isImageSave]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
