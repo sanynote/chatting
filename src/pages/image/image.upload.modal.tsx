@@ -23,10 +23,11 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
   const firstImage = user ? user.profileImage : "";
   const [imageUrl, setImageUrl] = React.useState(firstImage);
   const [imageFile, setImageFile] = React.useState<File>();
+  const [isImageSave, setIsImageSave] = React.useState(false);
 
-  const closeButton = () => {
-    setIsModal(false);
-  };
+  React.useEffect(() => {
+    if (!isImageSave) setIsModal(false);
+  }, [isImageSave]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return null;
@@ -40,13 +41,14 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
 
     try {
       const compressedFile = await imageCompression(imageFile, options);
+      setIsImageSave(true);
       const { status, data } = await SET_IMAGE("profileImage", compressedFile);
 
       if (status === 201) {
         if (user) {
           setUser({ ...user, profileImage: data.response.location[0] });
           alert("프로필사진 변경에 성공했습니다.");
-          setIsModal(false);
+          setIsImageSave(false);
         }
       }
     } catch (e) {
@@ -87,8 +89,6 @@ function ImageUploadModal({ isModal, setIsModal }: Props) {
       />
 
       <div onClick={changeImageButton}>프로필 사진 변경하기 확정!</div>
-
-      <div onClick={closeButton}>모달 끄기</div>
     </div>
   );
 }

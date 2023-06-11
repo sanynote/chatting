@@ -9,21 +9,19 @@ function MyPage() {
   const user = useRecoilValue(UserInfo);
   const [isModal, setIsModal] = React.useState(false);
   const navigate = useNavigate();
+  React.useEffect(()=> {
 
-  // React.useEffect(() => {
-  //   if (!user) {
-  //     alert("로그인이 필요한 페이지입니다.");
-  //   }
-  // }, [user]);
-  // if (!user)
-  //   return (
-  //     <>
-  //       <div>로그인이 필요한 페이지입니다.</div>
-  //       <button onClick={() => navigate("/signin")}>
-  //         로그인 화면으로 돌아가기
-  //       </button>
-  //     </>
-  //   );
+  },[isModal])
+
+  if (!user)
+    return (
+      <>
+        <div>로그인이 필요한 페이지입니다.</div>
+        <button onClick={() => navigate("/signin")}>
+          로그인 화면으로 돌아가기
+        </button>
+      </>
+    );
 
   return (
     <>

@@ -27,8 +27,6 @@ function App() {
         } else {
           throw new Error("예상하지 못한 에러,,");
         }
-      } finally {
-        setIsLoading(false);
       }
     }
     return null;
@@ -57,11 +55,16 @@ function App() {
       const uuid = user?.id;
       if (uuid) {
         const profileImage = await setImgToUser(uuid);
-        await setUser({...user, profileImage});
-        setIsLoading(false);
+        setUser({ ...user, profileImage });
       }
     });
   }, [accessToken]);
+
+  React.useEffect(() => {
+    if (isLoading && user) setIsLoading(false);
+  }, [user, isLoading]);
+
+  // isLoading으로 통신 여부 기록하고, user가 set될때 통신이 완료되었다는 의미 -> 완료되었다면 로딩을 꺼줌
 
   return (
     <React.Suspense fallback={<div>...loading</div>}>
